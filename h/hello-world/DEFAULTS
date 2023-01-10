@@ -1,0 +1,2 @@
+submit:
+- command: os=centos os_version=7 os_mount=nfs os_arch=x86_64 hello-world.yaml
