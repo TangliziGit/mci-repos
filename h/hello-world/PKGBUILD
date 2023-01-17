@@ -1,0 +1,23 @@
+pkgname="hello-world"
+pkgver=r1.ea1ebb0
+pkgrel=1
+arch=('x86_64')
+url="https://github.com/leachim6/hello-world"
+license=('MIT')
+source=("git+https://github.com/leachim6/hello-world.git")
+sha512sums=("SKIP")
+
+pkgver() {
+    cd "$srcdir"
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+    cd "$pkgname"
+    gcc c/C.c -o hello-world
+}
+
+package() {
+    mkdir -p "$pkgdir/usr/bin"
+    cp "$srcdir/$pkgname/hello-world" "$pkgdir/usr/bin"
+}
