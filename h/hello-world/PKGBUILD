@@ -1,5 +1,5 @@
 pkgname="hello-world"
-pkgver=r1.ea1ebb0
+pkgver=r1938.aeb09c6
 pkgrel=1
 arch=('x86_64')
 url="https://github.com/leachim6/hello-world"
@@ -8,7 +8,9 @@ source=("git+https://github.com/leachim6/hello-world.git")
 sha512sums=("SKIP")
 
 pkgver() {
-    cd "$srcdir"
+    # echo "$srcdir/$pkgname" >&2
+    # ls "$srcdir/$pkgname" | xargs -I{} echo "{}" >&2
+    cd "$srcdir/$pkgname"
     printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
