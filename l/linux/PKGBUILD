@@ -1,0 +1,55 @@
+# Maintainer: Jan Alexander Steffens (heftig) <heftig@archlinux.org>
+pkgname=linux
+pkgbase=linux
+pkgver=6.2.0
+pkgrel=1
+pkgdesc='Linux'
+url="https://github.com/archlinux/linux"
+arch=(x86_64)
+license=(GPL2)
+
+# NOTE: prepare function is called after pkgver in makepkg v4.2.0
+_download_source() {
+  [[ -d "linux" ]] && return
+  # retry git clone
+  for i in $(seq 1 5); do
+    git clone --depth 1 "$url" 2>&1 && break
+  done
+
+  cd linux
+  make defconfig
+  scripts/config --file .config --disable CONFIG_UNUSED_SYMBOLS
+  scripts/config --file .config --enable CONFIG_TRIM_UNUSED_KSYMS
+}
+
+prepare() {
+  cd $srcdir
+  _download_source
+}
+
+pkgver() {
+  cd $srcdir
+  _download_source 1>/dev/null
+
+  cd $srcdir/linux
+  make -s kernelrelease > version
+  version="$(<"$srcdir/linux/version")"
+  echo "${version%%-*}"
+}
+
+build() {
+  cd "$srcdir/linux"
+  echo "Building $pkgbase version $(<version)"
+  make bzImage
+  # touch arch/x86/boot/bzImage
+  cp arch/x86/boot/bzImage "bzImage-$(<version)"
+}
+
+package() {
+  path="$(find $srcdir -type f -name "bzImage-*")"
+  if [[ -z "$path" ]]; then
+    echo "no bzImage in $srcdir" >&2
+  else
+    cp "$path" "$pkgdir"
+  fi
+}
