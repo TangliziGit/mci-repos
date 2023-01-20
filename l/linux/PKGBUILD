@@ -40,16 +40,16 @@ pkgver() {
 build() {
   cd "$srcdir/linux"
   echo "Building $pkgbase version $(<version)"
-  make bzImage
-  # touch arch/x86/boot/bzImage
-  cp arch/x86/boot/bzImage "bzImage-$(<version)"
+  make all
 }
 
 package() {
-  path="$(find $srcdir -type f -name "bzImage-*")"
-  if [[ -z "$path" ]]; then
-    echo "no bzImage in $srcdir" >&2
-  else
-    cp "$path" "$pkgdir"
-  fi
+  cd "$srcdir/linux"
+
+  make INSTALL_MOD_PATH="$pkgdir/" INSTALL_MOD_STRIP=1 modules_install
+  modulesdir="$pkgdir/lib/modules/$(<version)"
+  rm "$modulesdir"/{source,build}
+
+  mkdir -p "$pkgdir/boot"
+  cp "$(make -s image_name)" "$pkgdir/boot/vmlinuz-$(<version)"
 }
