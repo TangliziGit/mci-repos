@@ -17,12 +17,8 @@ _download_source() {
   done
 
   cd linux
-  wget -q https://raw.githubusercontents.com/archlinux/svntogit-packages/packages/linux/trunk/config -O .config
+  wget -q https://raw.githubusercontent.com/TangliziGit/multiple-ci-repos/main/l/linux/config -O .config
   make olddefconfig 2>&1
-  scripts/config --file .config --disable CONFIG_UNUSED_SYMBOLS
-  scripts/config --file .config --enable CONFIG_TRIM_UNUSED_KSYMS
-  scripts/config --file .config --disable CONFIG_MODULE_COMPRESS_ZSTD
-  scripts/config --file .config --enable CONFIG_MODULE_COMPRESS_XZ
 }
 
 prepare() {
@@ -54,11 +50,5 @@ package() {
   rm "$modulesdir"/{source,build}
 
   mkdir -p "$pkgdir/boot"
-  make -s image_name >"$pkgdir/boot/image_name"
   cp "$(make -s image_name)" "$pkgdir/boot/vmlinuz-$(<version)"
-  cp "vmlinux" "$pkgdir/boot/vmlinux-$(<version)"
-  cp "arch/x86/boot/bzImage" "$pkgdir/boot/bzImage-$(<version)"
-  cp "arch/x86/boot/compressed/vmlinux" "$pkgdir/boot/compressed-vmlinux-$(<version)"
-  cp "arch/x86/boot/compressed/vmlinux.bin" "$pkgdir/boot/compressed-vmlinux-bin-$(<version)"
-  cp "arch/x86/boot/compressed/vmlinux.bin.zst" "$pkgdir/boot/compressed-vmlinux-bin-zstd-$(<version)"
 }
