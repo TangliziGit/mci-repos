@@ -7,6 +7,7 @@ pkgdesc='Linux'
 url="https://github.com/archlinux/linux"
 arch=(x86_64)
 license=(GPL2)
+config_url="https://raw.githubusercontent.com/TangliziGit/multiple-ci-repos/main/l/linux/config"
 
 # NOTE: prepare function is called after pkgver in makepkg v4.2.0
 _download_source() {
@@ -17,7 +18,9 @@ _download_source() {
   done
 
   cd linux
-  wget -q https://raw.githubusercontent.com/TangliziGit/multiple-ci-repos/main/l/linux/config -O .config
+  for i in $(seq 1 5); do
+    wget -q "$config_url" -O .config && break
+  done
   make olddefconfig 2>&1
 }
 
@@ -39,7 +42,7 @@ pkgver() {
 build() {
   cd "$srcdir/linux"
   echo "Building $pkgbase version $(<version)"
-  make -j 8 all
+  make -j 4 all
 }
 
 package() {
