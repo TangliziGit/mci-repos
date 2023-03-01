@@ -1,0 +1,5 @@
+stages:
+  - build:
+    - os=centos os_version=7 os_mount=nfs os_arch=aarch64 pkgbuild.yaml
+  - boot:
+    - os=centos os_version=7 os_mount=nfs os_arch=aarch64 hello-world.yaml
