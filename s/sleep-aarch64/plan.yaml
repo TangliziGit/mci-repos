@@ -1,0 +1,4 @@
+stages:
+  - build:
+    - os=debian os_version=11 os_mount=nfs os_arch=aarch64 runtime=10 sleep.yaml
+
