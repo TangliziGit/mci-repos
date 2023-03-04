@@ -1,7 +1,14 @@
 stages:
   - performance:
     - runtime=60 nr_threads=1 sysbench-cpu.yaml
+      check:sysbench-cpu.latency_ms.avg<0.6
+
     - runtime=60 nr_threads=1 sysbench-memory.yaml
+      check:sysbench-memory.throughput_MB/s>5000
+      check:sysbench-memory.latency_ms.max<0.6
+
     - runtime=60 nr_threads=1 sysbench-mutex.yaml
+      check:sysbench-mutex.latency_ms.avg<150
+
     - runtime=60 nr_threads=1 sysbench-threads.yaml
-    - runtime=60 nr_threads=1 sysbench-threads-git.yaml
+      check:sysbench-threads.latency_ms.avg<0.3
