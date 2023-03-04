@@ -1,8 +1,7 @@
 stages:
   - performance:
-    - os=centos os_version=7 os_mount=nfs os_arch=x86_64 sysbench-cpu.yaml
-    - os=centos os_version=7 os_mount=nfs os_arch=x86_64 sysbench-memory.yaml
-    - os=centos os_version=7 os_mount=nfs os_arch=x86_64 sysbench-mutex.yaml
-    - os=centos os_version=7 os_mount=nfs os_arch=x86_64 sysbench-threads.yaml
-    - os=centos os_version=7 os_mount=nfs os_arch=x86_64 sysbench-threads-git.yaml
-
+    - runtime=60 nr_threads=1 sysbench-cpu.yaml
+    - runtime=60 nr_threads=1 sysbench-memory.yaml
+    - runtime=60 nr_threads=1 sysbench-mutex.yaml
+    - runtime=60 nr_threads=1 sysbench-threads.yaml
+    - runtime=60 nr_threads=1 sysbench-threads-git.yaml
