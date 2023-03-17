@@ -1,0 +1,26 @@
+pkgname="hello-world-test"
+pkgver=r1938.aeb09c6
+pkgrel=1
+arch=('x86_64')
+url="https://gitee.com/thunderup12/hello-world-test"
+license=('MIT')
+source=("git+https://gitee.com/thunderup12/hello-world-test.git")
+sha512sums=("SKIP")
+
+pkgver() {
+    # echo "$srcdir/$pkgname" >&2
+    # ls "$srcdir/$pkgname" | xargs -I{} echo "{}" >&2
+    cd "$srcdir/$pkgname"
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+    cd "$pkgname"
+    gcc c/C.c -o hello-world
+    printf "build hello world test"
+}
+
+package() {
+    mkdir -p "$pkgdir/usr/bin"
+    cp "$srcdir/$pkgname/hello-world" "$pkgdir/usr/bin"
+}
