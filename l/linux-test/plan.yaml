@@ -1,0 +1,19 @@
+stages:
+  - build:
+    - os=centos os_version=7 os_mount=nfs os_arch=x86_64 pkgbuild.yaml
+  - boot:
+    - os=centos os_version=7 os_mount=nfs os_arch=x86_64 runtime=10 sleep.yaml
+  - performance:
+    - runtime=60 nr_threads=1 sysbench-cpu.yaml
+      check:sysbench-cpu.latency_ms.avg<100
+
+    - runtime=60 nr_threads=1 sysbench-memory.yaml
+      check:sysbench-memory.throughput_MB/s>0
+      check:sysbench-memory.latency_ms.max<100
+
+    - runtime=60 nr_threads=1 sysbench-mutex.yaml
+      check:sysbench-mutex.latency_ms.avg<1500
+
+    - runtime=60 nr_threads=1 sysbench-threads.yaml
+      check:sysbench-threads.latency_ms.avg<100
+
